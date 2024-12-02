@@ -22,14 +22,14 @@ namespace CinemaProject.Repositories
 
         public bool EntityExists(int id)
         {
-            throw new NotImplementedException();
+            return dbContext.Users.Any(u => u.Id == id);
         }
 
         public List<User> GetAll() => DbContext.Users.ToList();
 
-        public User GetById(int id)
+        public User? GetById(int id)
         {
-            throw new NotImplementedException();
+            return DbContext.Users.FirstOrDefault(u => u.Id == id);
         }
 
         public void Post(User entity)

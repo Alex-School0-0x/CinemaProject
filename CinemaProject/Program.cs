@@ -1,4 +1,6 @@
 using CinemaProject;
+using CinemaProject.Models;
+using CinemaProject.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CinemaContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+builder.Services.AddScoped<IFullRepository<User>, UserRepository>();
 
 
 var app = builder.Build();
