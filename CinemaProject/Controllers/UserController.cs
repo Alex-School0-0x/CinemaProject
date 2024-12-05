@@ -10,32 +10,41 @@ namespace CinemaProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserRepository _userRepo;
+        private readonly Type _type = typeof(User);
         public UserController(UserRepository userRepository)
         {
             _userRepo = userRepository;
         }
 
         [HttpGet]
-        public IActionResult GetUsers()
+        public async Task<IActionResult> GetUsers()
         {
-            return Ok(_userRepo.GetAll());
+            var t = await _userRepo.GetAllAsync();
+            return Ok(t);
         }
 
-        [HttpGet]
-        public IActionResult GetUser(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
         {
-            return Ok(_userRepo.GetById(id));
+            var t = await _userRepo.GetByIdAsync(id);
+            return Ok(t);
         }
 
         [HttpPost]
-        public IActionResult PostUser(User user)
+        public async Task<IActionResult> PostUser([FromForm] User user)
         {
-            _userRepo.Post(user);
-            return Ok();
+            var t = await _userRepo.PostAsync(user);
+            return Ok(t);
         }
 
         [HttpPut]
-        public IActionResult PutUser(User user)
+        public IActionResult PutUser([FromForm] User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete]
+        public Task<IActionResult> DeleteUser([FromForm] User user)
         {
             throw new NotImplementedException();
         }
