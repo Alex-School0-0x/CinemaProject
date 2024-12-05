@@ -14,33 +14,38 @@ namespace CinemaProject.Repositories
             this.dbContext = dbContext;
         }
 
-        public CinemaContext DbContext => dbContext;
-
-        public void Delete(User entity)
+        public async Task<bool> DeleteAsync(User entity)
         {
-            throw new NotImplementedException();
+            var entityEntry = dbContext.Users.Remove(entity);
+            if (entityEntry == null || entityEntry.State != EntityState.Deleted) return false;            
+            int t = await dbContext.SaveChangesAsync();
+            return t > 0;
         }
 
-        public bool EntityExists(int id)
+        public async Task<bool> EntityExistsAsync(int id) => await dbContext.Users.AnyAsync(e => e.Id == id);
+
+        public async Task<List<User>> GetAllAsync() => await dbContext.Users.ToListAsync();
+
+        public async Task<User> GetByIdAsync(int id) => await dbContext.Users.FirstAsync(e => e.Id == id);
+
+        public async Task<bool> PostAsync(User entity)
         {
-            return dbContext.Users.Any(u => u.Id == id);
+            await dbContext.Users.AddAsync(entity);
+            int t = await dbContext.SaveChangesAsync();
+            return t > 0;
         }
 
-        public List<User> GetAll() => DbContext.Users.ToList();
-
-        public User? GetById(int id)
+        public async Task<bool> PutAsync(User entity)
         {
-            return DbContext.Users.FirstOrDefault(u => u.Id == id);
-        }
-
-        public void Post(User entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Put(User entity)
-        {
-            throw new NotImplementedException();
+            var oldEntity = await dbContext.Users.FirstAsync(e => e.Id == entity.Id);
+            if (oldEntity == null) return false;
+            foreach (var p in oldEntity.GetType().GetProperties())
+            {
+                if (p.Name == "Id") continue;
+                p.SetValue(oldEntity, p.GetValue(entity));
+            }
+            int t = await dbContext.SaveChangesAsync();
+            return t > 0;
         }
     }
 }

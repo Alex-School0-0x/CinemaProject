@@ -2,8 +2,9 @@
 {
     public interface IGetRepository<T> where T : IModel
     {
-        public List<T> GetAll();
-        public T? GetById(int id);
-        public bool EntityExists(int id);
+        public Task<List<T>> GetAllAsync();
+        public Task<T> GetByIdAsync(int id);
+        public Task<bool> EntityExistsAsync(int id);
+
     }
 }
