@@ -1,4 +1,5 @@
 using CinemaProject;
+using CinemaProject.Interfaces;
 using CinemaProject.Models;
 using CinemaProject.Repositories;
 using Microsoft.EntityFrameworkCore;

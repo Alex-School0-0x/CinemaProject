@@ -1,4 +1,4 @@
-﻿namespace CinemaProject
+﻿namespace CinemaProject.Interfaces
 {
     public interface IModel
     {

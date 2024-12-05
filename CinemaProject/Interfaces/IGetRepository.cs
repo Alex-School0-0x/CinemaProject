@@ -1,5 +1,4 @@
-﻿
-namespace CinemaProject
+﻿namespace CinemaProject.Interfaces
 {
     public interface IGetRepository<T> where T : IModel
     {

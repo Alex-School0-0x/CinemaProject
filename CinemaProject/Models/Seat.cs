@@ -1,4 +1,6 @@
-﻿namespace CinemaProject.Models
+﻿using CinemaProject.Interfaces;
+
+namespace CinemaProject.Models
 {
     public class Seat : IModel
     {
