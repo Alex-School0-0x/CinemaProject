@@ -1,6 +1,6 @@
 ﻿namespace CinemaProject.Interfaces
 {
-    public interface IGetRepository<T> where T : IModel
+    public interface IGetRepository<T> where T : class, IModel
     {
         public Task<List<T>> GetAllAsync();
         public Task<T> GetByIdAsync(int id);

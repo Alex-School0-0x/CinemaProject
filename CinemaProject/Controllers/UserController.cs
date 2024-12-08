@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
+using CinemaProject.Filters;
 using CinemaProject.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -10,7 +10,6 @@ namespace CinemaProject.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserRepository _userRepo;
-        private readonly Type _type = typeof(User);
         public UserController(UserRepository userRepository)
         {
             _userRepo = userRepository;
@@ -24,6 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
         public async Task<IActionResult> GetUser(int id)
         {
             var t = await _userRepo.GetByIdAsync(id);
@@ -31,20 +31,24 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostUser([FromForm] User user)
+        [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
+        public async Task<IActionResult> PostUser([FromForm] User model)
         {
-            var t = await _userRepo.PostAsync(user);
+            var t = await _userRepo.PostAsync(model);
             return Ok(t);
         }
 
         [HttpPut]
-        public IActionResult PutUser([FromForm] User user)
+        [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
+        public async Task<IActionResult> PutUser([FromForm] User model)
         {
-            throw new NotImplementedException();
+            var t = await _userRepo.PutAsync(model);
+            return Ok(t);
         }
 
         [HttpDelete]
-        public Task<IActionResult> DeleteUser([FromForm] User user)
+        [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
+        public Task<IActionResult> DeleteUser([FromForm] User model)
         {
             throw new NotImplementedException();
         }

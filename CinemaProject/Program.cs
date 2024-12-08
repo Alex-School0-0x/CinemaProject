@@ -1,4 +1,5 @@
 using CinemaProject;
+using CinemaProject.Filters;
 using CinemaProject.Interfaces;
 using CinemaProject.Models;
 using CinemaProject.Repositories;
@@ -14,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<CinemaContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 builder.Services.AddScoped<IFullRepository<User>, UserRepository>();
+builder.Services.AddScoped<ModelValidateFilterAttribute<User>>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "CinemaApi", Version = "v1" });

@@ -1,10 +1,10 @@
 ﻿namespace CinemaProject.Interfaces
 {
-    public interface IFullRepository<T> : IGetRepository<T> where T : IModel
+    public interface IFullRepository<T> : IGetRepository<T> where T : class, IModel
     {
-        Task<bool> PostAsync(T entity);
-        Task<bool> PutAsync(T entity);
-        Task<bool> DeleteAsync(T entity);
+        Task<T> PostAsync(T entity);
+        Task<T> PutAsync(T entity);
+        Task<T> DeleteAsync(T entity);
 
     }
 }
