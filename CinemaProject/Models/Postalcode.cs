@@ -2,11 +2,9 @@
 
 namespace CinemaProject.Models
 {
-    public class Theater : IModel
+    public class Postalcode : IModel
     {
-        public int Id { get; set; }
+        public int Id {  get; set; }
         public required string Name { get; set; }
-        public required Address Address { get; set; }
-
     }
 }

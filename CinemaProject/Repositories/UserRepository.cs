@@ -14,13 +14,13 @@ namespace CinemaProject.Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<User> DeleteAsync(User entity)
+        public async Task<User> DeleteAsync(int id)
         {
-            var entityEntry = dbContext.Users.Remove(entity);
+            var entityEntry = dbContext.Users.Remove(await GetByIdAsync(id));
             if (entityEntry == null || entityEntry.State != EntityState.Deleted) 
                 throw new Exception("Entity was not deleted/Entity might not exist");            
             int t = await dbContext.SaveChangesAsync();
-            return entity;
+            return entityEntry.Entity;
         }
 
         public async Task<bool> EntityExistsAsync(int id) => await dbContext.Users.AnyAsync(e => e.Id == id);
@@ -46,7 +46,7 @@ namespace CinemaProject.Repositories
                 p.SetValue(oldEntity, p.GetValue(entity));
             }
             await dbContext.SaveChangesAsync();
-            return entity;
+            return oldEntity;
         }
     }
 }

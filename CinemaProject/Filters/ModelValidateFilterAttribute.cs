@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace CinemaProject.Filters
 {
-    public class ModelValidateFilterAttribute<T> : Attribute, IAsyncActionFilter where T : class, IModel
+    public class ModelValidateFilterAttribute<T> : IAsyncActionFilter where T : class, IModel
     {
         private readonly IFullRepository<T> _repository;
 

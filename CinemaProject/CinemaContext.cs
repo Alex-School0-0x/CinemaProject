@@ -12,6 +12,8 @@ namespace CinemaProject
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Showtime> Showtimes { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Postalcode> Postalcodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

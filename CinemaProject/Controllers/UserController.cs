@@ -32,7 +32,7 @@ namespace CinemaProject.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
-        public async Task<IActionResult> PostUser([FromForm] User model)
+        public async Task<IActionResult> PostUser([FromBody] User model)
         {
             var t = await _userRepo.PostAsync(model);
             return Ok(t);
@@ -40,17 +40,18 @@ namespace CinemaProject.Controllers
 
         [HttpPut]
         [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
-        public async Task<IActionResult> PutUser([FromForm] User model)
+        public async Task<IActionResult> PutUser([FromBody] User model)
         {
             var t = await _userRepo.PutAsync(model);
             return Ok(t);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [ServiceFilter(typeof(ModelValidateFilterAttribute<User>))]
-        public Task<IActionResult> DeleteUser([FromForm] User model)
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            var t = await _userRepo.DeleteAsync(id);
+            return Ok(t);
         }
     }
 }

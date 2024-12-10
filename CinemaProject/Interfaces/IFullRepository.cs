@@ -4,7 +4,7 @@
     {
         Task<T> PostAsync(T entity);
         Task<T> PutAsync(T entity);
-        Task<T> DeleteAsync(T entity);
+        Task<T> DeleteAsync(int id);
 
     }
 }
