@@ -6,9 +6,13 @@ namespace CinemaProject.Filters
 {
     public class ModelValidateFilterAttribute<T> : IAsyncActionFilter where T : class, IModel
     {
-        private readonly IFullRepository<T> _repository;
+        private readonly IGetRepository<T> _repository;
 
-        public ModelValidateFilterAttribute(IFullRepository<T> repository) { _repository = repository; }
+        public ModelValidateFilterAttribute(IGetRepository<T> repository) 
+        {
+            _repository = repository;
+
+        }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate @delegate) 
         {            

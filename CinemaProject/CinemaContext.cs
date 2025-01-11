@@ -22,6 +22,13 @@ namespace CinemaProject
             modelBuilder.Entity<User>()
                 .Property(d => d.CreateDate)
                 .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.Tickets)
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+                
         }
     }
 }

@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserRepository _userRepo;
-        public UserController(UserRepository userRepository)
+        private readonly GenericFullRepository<User> _userRepo;
+        public UserController(GenericFullRepository<User> userRepository)
         {
             _userRepo = userRepository;
         }

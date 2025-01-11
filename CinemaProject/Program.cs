@@ -12,10 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
-builder.Services.AddDbContext<CinemaContext>(options => 
+builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-builder.Services.AddScoped<IFullRepository<User>, UserRepository>();
-builder.Services.AddScoped<ModelValidateFilterAttribute<User>>();
+builder.Services.AddScoped(typeof(IFullRepository<User>), typeof(GenericFullRepository<>));
+builder.Services.AddScoped(typeof(ModelValidateFilterAttribute<>));
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "CinemaApi", Version = "v1" });
