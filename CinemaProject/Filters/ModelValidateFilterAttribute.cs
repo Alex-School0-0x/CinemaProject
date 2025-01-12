@@ -14,6 +14,11 @@ namespace CinemaProject.Filters
 
         }
 
+        public ModelValidateFilterAttribute(IFullRepository<T> repository)
+        {
+            _repository = repository;
+        }
+
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate @delegate) 
         {            
 

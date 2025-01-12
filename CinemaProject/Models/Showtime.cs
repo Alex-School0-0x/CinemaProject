@@ -7,6 +7,7 @@ namespace CinemaProject.Models
         public int Id { get; set; }
         public required Movie Movie { get; set; }
         public required Theater Theater { get; set; }
+        public required Hall Hall { get; set; }
         public DateTime ShowStart { get; set; }
     }
 }

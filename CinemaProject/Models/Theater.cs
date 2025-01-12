@@ -6,6 +6,7 @@ namespace CinemaProject.Models
     {
         public int Id { get; set; }
         public required string Name { get; set; }
+        public List<Hall> Halls { get; set; } = null!;
         public required Address Address { get; set; }
 
     }

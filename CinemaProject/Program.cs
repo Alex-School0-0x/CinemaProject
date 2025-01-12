@@ -14,7 +14,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
-builder.Services.AddScoped(typeof(IFullRepository<User>), typeof(GenericFullRepository<>));
+builder.Services.AddScoped(typeof(IGetRepository<>), typeof(GenericGetRepository<>));
+builder.Services.AddScoped(typeof(IFullRepository<>), typeof(GenericFullRepository<>));
 builder.Services.AddScoped(typeof(ModelValidateFilterAttribute<>));
 builder.Services.AddSwaggerGen(c =>
 {
