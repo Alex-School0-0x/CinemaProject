@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
-using CinemaProject.Repositories;
+using CinemaProject.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class ShowtimeController : ControllerBase
     {
-        private readonly GenericFullRepository<Showtime> _showtimeRepo;
-        public ShowtimeController(GenericFullRepository<Showtime> showtimeRepository)
+        private readonly IFullRepository<Showtime> _showtimeRepo;
+        public ShowtimeController(IFullRepository<Showtime> showtimeRepository)
         {
             _showtimeRepo = showtimeRepository;
         }
@@ -23,7 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Showtime>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Showtime>))]
         public async Task<IActionResult> GetShowtime(int id)
         {
             var t = await _showtimeRepo.GetByIdAsync(id);
@@ -31,7 +31,6 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Showtime>))]
         public async Task<IActionResult> PostShowtime([FromBody] Showtime model)
         {
             var t = await _showtimeRepo.PostAsync(model);
@@ -39,7 +38,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Showtime>))]
+        [ServiceFilter(typeof(ModelIdValidationFilterAttribute<Showtime>))]
         public async Task<IActionResult> PutShowtime([FromBody] Showtime model)
         {
             var t = await _showtimeRepo.PutAsync(model);
@@ -47,7 +46,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Showtime>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Showtime>))]
         public async Task<IActionResult> DeleteShowtime(int id)
         {
             var t = await _showtimeRepo.DeleteAsync(id);

@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
-using CinemaProject.Repositories;
+using CinemaProject.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        private readonly GenericFullRepository<Ticket> _ticketRepo;
-        public TicketController(GenericFullRepository<Ticket> ticketRepository)
+        private readonly IFullRepository<Ticket> _ticketRepo;
+        public TicketController(IFullRepository<Ticket> ticketRepository)
         {
             _ticketRepo = ticketRepository;
         }
@@ -23,7 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Ticket>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Ticket>))]
         public async Task<IActionResult> GetTicket(int id)
         {
             var t = await _ticketRepo.GetByIdAsync(id);
@@ -31,7 +31,6 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Ticket>))]
         public async Task<IActionResult> PostTicket([FromBody] Ticket model)
         {
             var t = await _ticketRepo.PostAsync(model);
@@ -39,7 +38,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Ticket>))]
+        [ServiceFilter(typeof(ModelIdValidationFilterAttribute<Ticket>))]
         public async Task<IActionResult> PutTicket([FromBody] Ticket model)
         {
             var t = await _ticketRepo.PutAsync(model);
@@ -47,7 +46,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Ticket>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Ticket>))]
         public async Task<IActionResult> DeleteTicket(int id)
         {
             var t = await _ticketRepo.DeleteAsync(id);

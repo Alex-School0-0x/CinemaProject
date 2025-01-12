@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
-using CinemaProject.Repositories;
+using CinemaProject.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private readonly GenericFullRepository<Genre> _genreRepo;
-        public GenreController(GenericFullRepository<Genre> genreRepository)
+        private readonly IFullRepository<Genre> _genreRepo;
+        public GenreController(IFullRepository<Genre> genreRepository)
         {
             _genreRepo = genreRepository;
         }
@@ -23,7 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Genre>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Genre>))]
         public async Task<IActionResult> GetGenre(int id)
         {
             var t = await _genreRepo.GetByIdAsync(id);
@@ -31,7 +31,6 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Genre>))]
         public async Task<IActionResult> PostGenre([FromBody] Genre model)
         {
             var t = await _genreRepo.PostAsync(model);
@@ -39,7 +38,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Genre>))]
+        [ServiceFilter(typeof(ModelIdValidationFilterAttribute<Genre>))]
         public async Task<IActionResult> PutGenre([FromBody] Genre model)
         {
             var t = await _genreRepo.PutAsync(model);
@@ -47,7 +46,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Genre>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Genre>))]
         public async Task<IActionResult> DeleteGenre(int id)
         {
             var t = await _genreRepo.DeleteAsync(id);

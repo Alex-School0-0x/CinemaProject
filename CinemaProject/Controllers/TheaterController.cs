@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
-using CinemaProject.Repositories;
+using CinemaProject.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class TheaterController : ControllerBase
     {
-        private readonly GenericFullRepository<Theater> _theaterRepo;
-        public TheaterController(GenericFullRepository<Theater> theaterRepository)
+        private readonly IFullRepository<Theater> _theaterRepo;
+        public TheaterController(IFullRepository<Theater> theaterRepository)
         {
             _theaterRepo = theaterRepository;
         }
@@ -23,7 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Theater>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Theater>))]
         public async Task<IActionResult> GetTheater(int id)
         {
             var t = await _theaterRepo.GetByIdAsync(id);
@@ -31,7 +31,6 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Theater>))]
         public async Task<IActionResult> PostTheater([FromBody] Theater model)
         {
             var t = await _theaterRepo.PostAsync(model);
@@ -39,7 +38,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Theater>))]
+        [ServiceFilter(typeof(ModelIdValidationFilterAttribute<Theater>))]
         public async Task<IActionResult> PutTheater([FromBody] Theater model)
         {
             var t = await _theaterRepo.PutAsync(model);
@@ -47,7 +46,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Theater>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Theater>))]
         public async Task<IActionResult> DeleteTheater(int id)
         {
             var t = await _theaterRepo.DeleteAsync(id);

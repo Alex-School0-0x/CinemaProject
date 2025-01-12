@@ -21,10 +21,8 @@ namespace CinemaProject.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            var entity = await _dbSet.FindAsync(id);
-            if (entity == null)
-                throw new Exception($"{typeof(T).Name} with ID {id} not found.");
-            return entity;
+            var entity = await _dbSet.FirstAsync(e => e.Id == id);
+            return entity ?? throw new Exception($"{typeof(T).Name} with ID {id} not found.");
         }
 
         public async Task<bool> EntityExistsAsync(int id)

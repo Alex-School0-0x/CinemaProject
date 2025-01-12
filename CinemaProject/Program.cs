@@ -16,7 +16,8 @@ builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 builder.Services.AddScoped(typeof(IGetRepository<>), typeof(GenericGetRepository<>));
 builder.Services.AddScoped(typeof(IFullRepository<>), typeof(GenericFullRepository<>));
-builder.Services.AddScoped(typeof(ModelValidateFilterAttribute<>));
+builder.Services.AddScoped(typeof(IdValidateFilterAttribute<>));
+builder.Services.AddScoped(typeof(ModelIdValidationFilterAttribute<>));
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "CinemaApi", Version = "v1" });

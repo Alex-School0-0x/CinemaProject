@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
-using CinemaProject.Repositories;
+using CinemaProject.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private readonly GenericFullRepository<Movie> _movieRepo;
-        public MovieController(GenericFullRepository<Movie> movieRepository)
+        private readonly IFullRepository<Movie> _movieRepo;
+        public MovieController(IFullRepository<Movie> movieRepository)
         {
             _movieRepo = movieRepository;
         }
@@ -23,7 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Movie>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Movie>))]
         public async Task<IActionResult> GetMovie(int id)
         {
             var t = await _movieRepo.GetByIdAsync(id);
@@ -31,7 +31,6 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Movie>))]
         public async Task<IActionResult> PostMovie([FromBody] Movie model)
         {
             var t = await _movieRepo.PostAsync(model);
@@ -39,7 +38,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Movie>))]
+        [ServiceFilter(typeof(ModelIdValidationFilterAttribute<Movie>))]
         public async Task<IActionResult> PutMovie([FromBody] Movie model)
         {
             var t = await _movieRepo.PutAsync(model);
@@ -47,7 +46,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Movie>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Movie>))]
         public async Task<IActionResult> DeleteMovie(int id)
         {
             var t = await _movieRepo.DeleteAsync(id);

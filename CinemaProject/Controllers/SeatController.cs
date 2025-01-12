@@ -1,6 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
-using CinemaProject.Repositories;
+using CinemaProject.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaProject.Controllers
@@ -9,8 +9,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class SeatController : ControllerBase
     {
-        private readonly GenericFullRepository<Seat> _seatRepo;
-        public SeatController(GenericFullRepository<Seat> seatRepository)
+        private readonly IFullRepository<Seat> _seatRepo;
+        public SeatController(IFullRepository<Seat> seatRepository)
         {
             _seatRepo = seatRepository;
         }
@@ -23,7 +23,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Seat>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Seat>))]
         public async Task<IActionResult> GetSeat(int id)
         {
             var t = await _seatRepo.GetByIdAsync(id);
@@ -31,7 +31,6 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPost]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Seat>))]
         public async Task<IActionResult> PostSeat([FromBody] Seat model)
         {
             var t = await _seatRepo.PostAsync(model);
@@ -39,7 +38,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpPut]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Seat>))]
+        [ServiceFilter(typeof(ModelIdValidationFilterAttribute<Seat>))]
         public async Task<IActionResult> PutSeat([FromBody] Seat model)
         {
             var t = await _seatRepo.PutAsync(model);
@@ -47,7 +46,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Seat>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Seat>))]
         public async Task<IActionResult> DeleteSeat(int id)
         {
             var t = await _seatRepo.DeleteAsync(id);

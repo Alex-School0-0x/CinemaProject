@@ -17,7 +17,7 @@ namespace CinemaProject.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -64,6 +64,28 @@ namespace CinemaProject.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("CinemaProject.Models.Hall", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TheaterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TheaterId");
+
+                    b.ToTable("Halls");
+                });
+
             modelBuilder.Entity("CinemaProject.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -96,10 +118,7 @@ namespace CinemaProject.Migrations
             modelBuilder.Entity("CinemaProject.Models.Postalcode", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -118,7 +137,7 @@ namespace CinemaProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("HallNumber")
+                    b.Property<int>("HallId")
                         .HasColumnType("int");
 
                     b.Property<int>("RowNumber")
@@ -132,6 +151,8 @@ namespace CinemaProject.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HallId");
+
                     b.ToTable("Seats");
                 });
 
@@ -143,6 +164,9 @@ namespace CinemaProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("HallId")
+                        .HasColumnType("int");
+
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
 
@@ -153,6 +177,8 @@ namespace CinemaProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HallId");
 
                     b.HasIndex("MovieId");
 
@@ -275,8 +301,30 @@ namespace CinemaProject.Migrations
                     b.Navigation("Postalcode");
                 });
 
+            modelBuilder.Entity("CinemaProject.Models.Hall", b =>
+                {
+                    b.HasOne("CinemaProject.Models.Theater", null)
+                        .WithMany("Halls")
+                        .HasForeignKey("TheaterId");
+                });
+
+            modelBuilder.Entity("CinemaProject.Models.Seat", b =>
+                {
+                    b.HasOne("CinemaProject.Models.Hall", null)
+                        .WithMany("Seats")
+                        .HasForeignKey("HallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CinemaProject.Models.Showtime", b =>
                 {
+                    b.HasOne("CinemaProject.Models.Hall", "Hall")
+                        .WithMany()
+                        .HasForeignKey("HallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CinemaProject.Models.Movie", "Movie")
                         .WithMany()
                         .HasForeignKey("MovieId")
@@ -288,6 +336,8 @@ namespace CinemaProject.Migrations
                         .HasForeignKey("TheaterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Hall");
 
                     b.Navigation("Movie");
 
@@ -314,9 +364,9 @@ namespace CinemaProject.Migrations
                         .IsRequired();
 
                     b.HasOne("CinemaProject.Models.Showtime", "Showtime")
-                        .WithMany()
+                        .WithMany("Tickets")
                         .HasForeignKey("ShowtimeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("CinemaProject.Models.User", "User")
@@ -356,6 +406,21 @@ namespace CinemaProject.Migrations
                         .HasForeignKey("MoviesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CinemaProject.Models.Hall", b =>
+                {
+                    b.Navigation("Seats");
+                });
+
+            modelBuilder.Entity("CinemaProject.Models.Showtime", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("CinemaProject.Models.Theater", b =>
+                {
+                    b.Navigation("Halls");
                 });
 
             modelBuilder.Entity("CinemaProject.Models.User", b =>

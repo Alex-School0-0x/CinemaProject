@@ -1,5 +1,6 @@
 ﻿using CinemaProject.Models;
 using CinemaProject.Filters;
+using CinemaProject.Interfaces;
 using CinemaProject.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,8 +10,8 @@ namespace CinemaProject.Controllers
     [ApiController]
     public class PostalcodeController : ControllerBase
     {
-        private readonly GenericGetRepository<Postalcode> _postalcodeRepo;
-        public PostalcodeController(GenericGetRepository<Postalcode> postalcodeRepository)
+        private readonly IGetRepository<Postalcode> _postalcodeRepo;
+        public PostalcodeController(IGetRepository<Postalcode> postalcodeRepository)
         {
             _postalcodeRepo = postalcodeRepository;
         }
@@ -23,7 +24,7 @@ namespace CinemaProject.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ModelValidateFilterAttribute<Postalcode>))]
+        [ServiceFilter(typeof(IdValidateFilterAttribute<Postalcode>))]
         public async Task<IActionResult> GetPostalcode(int id)
         {
             var t = await _postalcodeRepo.GetByIdAsync(id);

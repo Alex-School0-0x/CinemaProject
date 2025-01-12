@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CinemaProject.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -45,29 +45,12 @@ namespace CinemaProject.Migrations
                 name: "Postalcodes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Postalcodes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Seats",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    HallNumber = table.Column<int>(type: "int", nullable: false),
-                    RowNumber = table.Column<int>(type: "int", nullable: false),
-                    SeatNumber = table.Column<int>(type: "int", nullable: false),
-                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Seats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,9 +83,8 @@ namespace CinemaProject.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Street1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Street2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PostalcodeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -160,6 +142,47 @@ namespace CinemaProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Halls",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TheaterId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Halls", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Halls_Theaters_TheaterId",
+                        column: x => x.TheaterId,
+                        principalTable: "Theaters",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Seats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HallId = table.Column<int>(type: "int", nullable: false),
+                    RowNumber = table.Column<int>(type: "int", nullable: false),
+                    SeatNumber = table.Column<int>(type: "int", nullable: false),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Seats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Seats_Halls_HallId",
+                        column: x => x.HallId,
+                        principalTable: "Halls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Showtimes",
                 columns: table => new
                 {
@@ -167,11 +190,18 @@ namespace CinemaProject.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MovieId = table.Column<int>(type: "int", nullable: false),
                     TheaterId = table.Column<int>(type: "int", nullable: false),
+                    HallId = table.Column<int>(type: "int", nullable: false),
                     ShowStart = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Showtimes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Showtimes_Halls_HallId",
+                        column: x => x.HallId,
+                        principalTable: "Halls",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Showtimes_Movies_MovieId",
                         column: x => x.MovieId,
@@ -210,8 +240,7 @@ namespace CinemaProject.Migrations
                         name: "FK_Tickets_Showtimes_ShowtimeId",
                         column: x => x.ShowtimeId,
                         principalTable: "Showtimes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tickets_Users_UserId",
                         column: x => x.UserId,
@@ -228,6 +257,21 @@ namespace CinemaProject.Migrations
                 name: "IX_GenreMovie_MoviesId",
                 table: "GenreMovie",
                 column: "MoviesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Halls_TheaterId",
+                table: "Halls",
+                column: "TheaterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Seats_HallId",
+                table: "Seats",
+                column: "HallId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showtimes_HallId",
+                table: "Showtimes",
+                column: "HallId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Showtimes_MovieId",
@@ -285,6 +329,9 @@ namespace CinemaProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Halls");
 
             migrationBuilder.DropTable(
                 name: "Movies");

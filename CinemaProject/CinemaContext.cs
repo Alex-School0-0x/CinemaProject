@@ -8,6 +8,7 @@ namespace CinemaProject
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Theater> Theaters { get; set; }
+        public DbSet<Hall> Halls { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
@@ -28,6 +29,18 @@ namespace CinemaProject
                 .WithMany(u => u.Tickets)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<Ticket>()
+                .HasOne(t => t.Showtime)
+                .WithMany(u => u.Tickets)
+                .HasForeignKey(t => t.ShowtimeId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Postalcode>()
+                .Property(p => p.Id)
+                .ValueGeneratedNever();
+
+                
                 
         }
     }
