@@ -28,9 +28,10 @@ namespace CinemaProject.Repositories
             if (existingEntity == null)
                 throw new Exception($"{typeof(T).Name} with ID {entity.Id} not found.");
 
-            _dbContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+            var entityEntry = _dbContext.Entry(existingEntity);
+            entityEntry.CurrentValues.SetValues(entity);
             await _dbContext.SaveChangesAsync();
-            return existingEntity;
+            return entityEntry.Entity;
         }
 
         public async Task<T> DeleteAsync(int id)
@@ -39,9 +40,9 @@ namespace CinemaProject.Repositories
             if (entity == null)
                 throw new Exception($"{typeof(T).Name} with ID {id} not found.");
 
-            _dbSet.Remove(entity);
+            var entityEntry = _dbSet.Remove(entity);
             await _dbContext.SaveChangesAsync();
-            return entity;
+            return entityEntry.Entity;
         }
     }
 }
