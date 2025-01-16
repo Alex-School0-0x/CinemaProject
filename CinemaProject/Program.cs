@@ -12,6 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") // Allow requests from Angular app
+              .AllowAnyHeader() // Allow all headers (e.g., Authorization)
+              .AllowAnyMethod() // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+              .AllowCredentials(); // Allow cookies if needed
+    });
+});
 builder.Services.AddDbContext<CinemaContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 builder.Services.AddScoped(typeof(IGetRepository<>), typeof(GenericGetRepository<>));
@@ -35,7 +45,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-
+app.UseCors("AllowAngularApp");
 
 // Configure the HTTP request pipeline.
 
