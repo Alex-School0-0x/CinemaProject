@@ -3,7 +3,7 @@
 namespace CinemaProject.Models
 {
     /// <summary>
-    /// I need Some forklaring for the properties
+    /// I need Some Explinations for why the properties are what they are
     /// </summary>
     public class Address : IModel
     {
